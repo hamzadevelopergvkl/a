@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Shadow Store</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
       margin: 0;
@@ -13,7 +12,6 @@
       background-color: #0d1117;
       color: #f0f6fc;
     }
-
     header {
       background-color: #161b22;
       padding: 1rem 2rem;
@@ -25,29 +23,24 @@
       z-index: 999;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
     }
-
     nav a {
       color: #8b949e;
       margin-left: 1.5rem;
       text-decoration: none;
       font-weight: 500;
     }
-
     nav a:hover {
       color: #58a6ff;
     }
-
     .hero {
       text-align: center;
       padding: 6rem 1rem;
       background: linear-gradient(to bottom, #0d1117, #161b22);
     }
-
     .hero h2 {
       font-size: 3rem;
       color: #58a6ff;
     }
-
     .btn {
       display: inline-block;
       padding: 0.75rem 1.5rem;
@@ -57,19 +50,16 @@
       text-decoration: none;
       margin-top: 1rem;
     }
-
     .section {
       padding: 4rem 2rem;
       max-width: 1200px;
       margin: auto;
     }
-
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
     }
-
     .card {
       background-color: #161b22;
       padding: 2rem;
@@ -78,19 +68,15 @@
       cursor: pointer;
       transition: transform 0.3s;
     }
-
     .card:hover {
       transform: scale(1.05);
     }
-
     .card h3 {
       color: #58a6ff;
     }
-
     .card p {
       color: #c9d1d9;
     }
-
     .detail {
       display: none;
       background-color: #0d1117;
@@ -98,7 +84,6 @@
       border-top: 1px solid #30363d;
       animation: fadeIn 0.5s ease-in-out;
     }
-
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -109,13 +94,11 @@
         transform: translateY(0);
       }
     }
-
     .detail img {
       max-width: 100%;
       border-radius: 8px;
       margin-bottom: 1rem;
     }
-
     .contact-box {
       margin-top: 2rem;
       padding: 1rem;
@@ -123,7 +106,6 @@
       border: 1px solid #30363d;
       border-radius: 8px;
     }
-
     .copy-btn {
       background-color: #238636;
       color: white;
@@ -133,13 +115,14 @@
       border-radius: 6px;
       cursor: pointer;
     }
-
     .copy-btn:hover {
       background-color: #2ea043;
     }
+    #bot-code {
+      display: none;
+    }
   </style>
 </head>
-
 <body>
   <header>
     <h1>🧠 Shadow Store</h1>
@@ -161,12 +144,10 @@
         <h3>Groq AI</h3>
         <p>simple python AI</p>
       </div>
-
       <div class="card" onclick="showDetail('telegram')">
         <h3>Telegram Auto Responder</h3>
         <p>AI replies to messages on Telegram.</p>
       </div>
-
       <div class="card" onclick="showDetail('proxy')">
         <h3>Proxy Scraper Engine</h3>
         <p>Scrapes & tests proxies automatically.</p>
@@ -178,7 +159,7 @@
     <img id="bot-image" src="" alt="Bot Image">
     <h2 id="bot-title"></h2>
     <p id="bot-description"></p>
-    <pre><code id="bot-c"># Example Code Snippet</code></pre>
+    <pre><code id="bot-code"></code></pre>
     <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
     <div class="contact-box">
       <h3>Contact This Developer</h3>
@@ -205,216 +186,9 @@
     const botData = {
       youtube: {
         title: 'Groq AI',
-       description: `first install these dependeis
-pip install PyQt
-pip install requests
-pip install SpeechRecognition
-pip install pyaudio
-
-simple python AI - example: shadowai.up.railway.app
-To run: first save code in ai.py then in terminal do python ai.py`
-,
+        description: `Install these dependencies:\n- pip install PyQt\n- pip install requests\n- pip install SpeechRecognition\n- pip install pyaudio\n\nExample: shadowai.up.railway.app\nTo run: python ai.py`,
         image: 'https://i.imgur.com/6dX9sKz.png',
-        code: `import sys
-import requests
-import threading
-import speech_recognition as sr
-from PyQt5.QtWidgets import (
-    QApplication, QWidget, QTextEdit, QVBoxLayout, QLineEdit,
-    QPushButton, QHBoxLayout, QComboBox, QLabel
-)
-from PyQt5.QtCore import Qt, pyqtSignal, QObject
-from PyQt5.QtGui import QFont, QColor, QTextCursor
-
-API_KEY = "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"
-url = "https://api.groq.com/openai/v1/chat/completions"
-headers = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json"
-}
-
-class Communicator(QObject):
-    update_chat = pyqtSignal(str, str)
-
-class ShadowAIApp(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("⚡ Shadow AI Chat")
-        self.setStyleSheet("background-color: #121212; color: white;")
-        self.setFixedSize(800, 600)
-
-        self.chat_history = []
-
-        self.c = Communicator()
-        self.c.update_chat.connect(self.display_message)
-
-        font = QFont("Arial", 10)
-
-        self.chat_display = QTextEdit()
-        self.chat_display.setFont(font)
-        self.chat_display.setReadOnly(True)
-        self.chat_display.setStyleSheet("""
-            QTextEdit {
-                background-color: #1E1E1E;
-                border-radius: 10px;
-                padding: 10px;
-                color: white;
-            }
-        """)
-
-        self.inject_input = QLineEdit()
-        self.inject_input.setFont(font)
-        self.inject_input.setPlaceholderText("🔐 Hidden prompt (optional)")
-        self.inject_input.setStyleSheet("""
-            QLineEdit {
-                background-color: #1A1A1A;
-                color: #AAAAAA;
-                padding: 8px;
-                border-radius: 8px;
-                border: 1px solid #444444;
-            }
-        """)
-
-        self.input_box = QLineEdit()
-        self.input_box.setFont(font)
-        self.input_box.setPlaceholderText("Type your message...")
-        self.input_box.setStyleSheet("""
-            QLineEdit {
-                background-color: #292929;
-                color: white;
-                padding: 10px;
-                border-radius: 8px;
-                border: 2px solid #03DAC6;
-            }
-        """)
-        self.input_box.returnPressed.connect(self.send_message)
-
-        self.send_button = QPushButton("➤")
-        self.send_button.setFont(QFont("Arial", 12, QFont.Bold))
-        self.send_button.setStyleSheet("""
-            QPushButton {
-                background-color: #03DAC6;
-                color: black;
-                border-radius: 8px;
-                padding: 10px 20px;
-            }
-            QPushButton:hover {
-                background-color: #00BFA5;
-            }
-        """)
-        self.send_button.clicked.connect(self.send_message)
-
-        self.voice_button = QPushButton("🎤")
-        self.voice_button.setStyleSheet("""
-            QPushButton {
-                background-color: #333333;
-                color: white;
-                border-radius: 8px;
-                padding: 10px;
-            }
-        """)
-        self.voice_button.clicked.connect(self.voice_input_thread)
-
-        self.model_dropdown = QComboBox()
-        self.model_dropdown.setStyleSheet("""
-            QComboBox {
-                background-color: #1A1A1A;
-                color: white;
-                border-radius: 8px;
-                padding: 5px;
-            }
-        """)
-        self.models = {
-            "LLaMA 3 (70B)": "llama3-70b-8192",
-            "LLaMA 3 (8B)": "llama3-8b-8192",
-            "Mixtral (8x7B)": "mixtral-8x7b-32768"
-        }
-        self.model_dropdown.addItems(self.models.keys())
-
-        layout = QVBoxLayout()
-        layout.addWidget(self.chat_display)
-        layout.addWidget(self.inject_input)
-        layout.addWidget(self.input_box)
-
-        hbox = QHBoxLayout()
-        hbox.addWidget(self.send_button)
-        hbox.addWidget(self.voice_button)
-        hbox.addWidget(self.model_dropdown)
-        layout.addLayout(hbox)
-
-        self.setLayout(layout)
-
-    def display_message(self, message, sender="user"):
-        color = "white" if sender in ["user", "ai"] else "red"
-        self.chat_display.setTextColor(QColor(color))
-        self.chat_display.append(message)
-        self.chat_display.append("")
-        self.chat_display.moveCursor(QTextCursor.End)
-
-    def send_message(self):
-        model = self.models[self.model_dropdown.currentText()]
-        text = self.input_box.text().strip()
-        inject = self.inject_input.text().strip()
-
-        if not text:
-            return
-
-        self.display_message(f"🧑 You: {text}", "user")
-        user_message = {"role": "user", "content": text}
-
-        full_context = [{"role": "system", "content": inject}] if inject else []
-        full_context.extend(self.chat_history)
-        full_context.append(user_message)
-        self.chat_history.append(user_message)
-
-        self.input_box.clear()
-
-        payload = {
-            "model": model,
-            "messages": full_context,
-            "max_tokens": 512,
-            "temperature": 0.7
-        }
-
-        def fetch_response():
-            try:
-                response = requests.post(url, headers=headers, json=payload)
-                if response.status_code == 200:
-                    reply = response.json()['choices'][0]['message']['content']
-                    self.chat_history.append({"role": "assistant", "content": reply})
-                    self.c.update_chat.emit(f"🤖 Shadow AI: {reply}", "ai")
-                else:
-                    self.c.update_chat.emit(f"⚠️ Error {response.status_code}: {response.text}", "error")
-            except Exception as e:
-                self.c.update_chat.emit(f"❌ Exception: {str(e)}", "error")
-
-        threading.Thread(target=fetch_response).start()
-
-    def voice_input_thread(self):
-        threading.Thread(target=self.voice_input).start()
-
-    def voice_input(self):
-        recognizer = sr.Recognizer()
-        with sr.Microphone() as source:
-            self.c.update_chat.emit("🎤 Listening...", "ai")
-            try:
-                audio = recognizer.listen(source, timeout=5)
-                text = recognizer.recognize_google(audio)
-                self.input_box.setText(text)
-                self.send_message()
-            except sr.UnknownValueError:
-                self.c.update_chat.emit("❌ Could not understand audio", "error")
-            except sr.RequestError:
-                self.c.update_chat.emit("❌ Voice recognition error", "error")
-            except sr.WaitTimeoutError:
-                self.c.update_chat.emit("⏱️ No speech detected", "error")
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = ShadowAIApp()
-    window.show()
-    sys.exit(app.exec_())
-`
+        code: `# sample code\nimport requests\nprint("Shadow AI Running")`
       },
       telegram: {
         title: 'Telegram Auto Responder',
@@ -430,7 +204,10 @@ if __name__ == "__main__":
       }
     };
 
+    let currentBotKey = null;
+
     function showDetail(botKey) {
+      currentBotKey = botKey;
       const bot = botData[botKey];
       document.getElementById('bot-title').textContent = bot.title;
       document.getElementById('bot-description').textContent = bot.description;
@@ -441,12 +218,12 @@ if __name__ == "__main__":
     }
 
     function copyCode() {
-      const codeText = document.getElementById('bot-code').textContent;
-      navigator.clipboard.writeText(codeText).then(() => {
-        alert('Code copied to clipboard!');
-      });
+      if (currentBotKey && botData[currentBotKey]) {
+        navigator.clipboard.writeText(botData[currentBotKey].code).then(() => {
+          alert('✅ Code copied to clipboard!');
+        });
+      }
     }
   </script>
 </body>
-
 </html>
