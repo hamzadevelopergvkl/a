@@ -188,7 +188,206 @@
         title: 'Groq AI',
         description: `Install these dependencies:\n- pip install PyQt\n- pip install requests\n- pip install SpeechRecognition\n- pip install pyaudio\n\nExample: shadowai.up.railway.app\nTo run: python ai.py`,
         image: 'https://i.imgur.com/6dX9sKz.png',
-        code: `# sample code\nimport requests\nprint("Shadow AI Running")`
+        code: `import sys
+import requests
+import threading
+import speech_recognition as sr
+from PyQt5.QtWidgets import (
+    QApplication, QWidget, QTextEdit, QVBoxLayout, QLineEdit,
+    QPushButton, QHBoxLayout, QComboBox, QLabel
+)
+from PyQt5.QtCore import Qt, pyqtSignal, QObject
+from PyQt5.QtGui import QFont, QColor, QTextCursor
+
+API_KEY = "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"
+url = "https://api.groq.com/openai/v1/chat/completions"
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json"
+}
+
+class Communicator(QObject):
+    update_chat = pyqtSignal(str, str)
+
+class ShadowAIApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("⚡ Shadow AI Chat")
+        self.setStyleSheet("background-color: #121212; color: white;")
+        self.setFixedSize(800, 600)
+
+        self.chat_history = []
+
+        self.c = Communicator()
+        self.c.update_chat.connect(self.display_message)
+
+        font = QFont("Arial", 10)
+
+        self.chat_display = QTextEdit()
+        self.chat_display.setFont(font)
+        self.chat_display.setReadOnly(True)
+        self.chat_display.setStyleSheet("""
+            QTextEdit {
+                background-color: #1E1E1E;
+                border-radius: 10px;
+                padding: 10px;
+                color: white;
+            }
+        """)
+
+        self.inject_input = QLineEdit()
+        self.inject_input.setFont(font)
+        self.inject_input.setPlaceholderText("🔐 Hidden prompt (optional)")
+        self.inject_input.setStyleSheet("""
+            QLineEdit {
+                background-color: #1A1A1A;
+                color: #AAAAAA;
+                padding: 8px;
+                border-radius: 8px;
+                border: 1px solid #444444;
+            }
+        """)
+
+        self.input_box = QLineEdit()
+        self.input_box.setFont(font)
+        self.input_box.setPlaceholderText("Type your message...")
+        self.input_box.setStyleSheet("""
+            QLineEdit {
+                background-color: #292929;
+                color: white;
+                padding: 10px;
+                border-radius: 8px;
+                border: 2px solid #03DAC6;
+            }
+        """)
+        self.input_box.returnPressed.connect(self.send_message)
+
+        self.send_button = QPushButton("➤")
+        self.send_button.setFont(QFont("Arial", 12, QFont.Bold))
+        self.send_button.setStyleSheet("""
+            QPushButton {
+                background-color: #03DAC6;
+                color: black;
+                border-radius: 8px;
+                padding: 10px 20px;
+            }
+            QPushButton:hover {
+                background-color: #00BFA5;
+            }
+        """)
+        self.send_button.clicked.connect(self.send_message)
+
+        self.voice_button = QPushButton("🎤")
+        self.voice_button.setStyleSheet("""
+            QPushButton {
+                background-color: #333333;
+                color: white;
+                border-radius: 8px;
+                padding: 10px;
+            }
+        """)
+        self.voice_button.clicked.connect(self.voice_input_thread)
+
+        self.model_dropdown = QComboBox()
+        self.model_dropdown.setStyleSheet("""
+            QComboBox {
+                background-color: #1A1A1A;
+                color: white;
+                border-radius: 8px;
+                padding: 5px;
+            }
+        """)
+        self.models = {
+            "LLaMA 3 (70B)": "llama3-70b-8192",
+            "LLaMA 3 (8B)": "llama3-8b-8192",
+            "Mixtral (8x7B)": "mixtral-8x7b-32768"
+        }
+        self.model_dropdown.addItems(self.models.keys())
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.chat_display)
+        layout.addWidget(self.inject_input)
+        layout.addWidget(self.input_box)
+
+        hbox = QHBoxLayout()
+        hbox.addWidget(self.send_button)
+        hbox.addWidget(self.voice_button)
+        hbox.addWidget(self.model_dropdown)
+        layout.addLayout(hbox)
+
+        self.setLayout(layout)
+
+    def display_message(self, message, sender="user"):
+        color = "white" if sender in ["user", "ai"] else "red"
+        self.chat_display.setTextColor(QColor(color))
+        self.chat_display.append(message)
+        self.chat_display.append("")
+        self.chat_display.moveCursor(QTextCursor.End)
+
+    def send_message(self):
+        model = self.models[self.model_dropdown.currentText()]
+        text = self.input_box.text().strip()
+        inject = self.inject_input.text().strip()
+
+        if not text:
+            return
+
+        self.display_message(f"🧑 You: {text}", "user")
+        user_message = {"role": "user", "content": text}
+
+        full_context = [{"role": "system", "content": inject}] if inject else []
+        full_context.extend(self.chat_history)
+        full_context.append(user_message)
+        self.chat_history.append(user_message)
+
+        self.input_box.clear()
+
+        payload = {
+            "model": model,
+            "messages": full_context,
+            "max_tokens": 512,
+            "temperature": 0.7
+        }
+
+        def fetch_response():
+            try:
+                response = requests.post(url, headers=headers, json=payload)
+                if response.status_code == 200:
+                    reply = response.json()['choices'][0]['message']['content']
+                    self.chat_history.append({"role": "assistant", "content": reply})
+                    self.c.update_chat.emit(f"🤖 Shadow AI: {reply}", "ai")
+                else:
+                    self.c.update_chat.emit(f"⚠️ Error {response.status_code}: {response.text}", "error")
+            except Exception as e:
+                self.c.update_chat.emit(f"❌ Exception: {str(e)}", "error")
+
+        threading.Thread(target=fetch_response).start()
+
+    def voice_input_thread(self):
+        threading.Thread(target=self.voice_input).start()
+
+    def voice_input(self):
+        recognizer = sr.Recognizer()
+        with sr.Microphone() as source:
+            self.c.update_chat.emit("🎤 Listening...", "ai")
+            try:
+                audio = recognizer.listen(source, timeout=5)
+                text = recognizer.recognize_google(audio)
+                self.input_box.setText(text)
+                self.send_message()
+            except sr.UnknownValueError:
+                self.c.update_chat.emit("❌ Could not understand audio", "error")
+            except sr.RequestError:
+                self.c.update_chat.emit("❌ Voice recognition error", "error")
+            except sr.WaitTimeoutError:
+                self.c.update_chat.emit("⏱️ No speech detected", "error")
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = ShadowAIApp()
+    window.show()
+    sys.exit(app.exec_())
+")`
       },
       telegram: {
         title: 'Telegram Auto Responder',
