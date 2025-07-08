@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadow AI Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0d1117;
+      color: #f0f6fc;
+    }
+
+    header {
+      background-color: #161b22;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    }
+
+    nav a {
+      color: #8b949e;
+      margin-left: 1.5rem;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav a:hover {
+      color: #58a6ff;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 6rem 1rem;
+      background: linear-gradient(to bottom, #0d1117, #161b22);
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+      color: #58a6ff;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background-color: #238636;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+
+    .section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background-color: #161b22;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card h3 {
+      color: #58a6ff;
+    }
+
+    .card p {
+      color: #c9d1d9;
+    }
+
+    .detail {
+      display: none;
+      background-color: #0d1117;
+      padding: 2rem;
+      border-top: 1px solid #30363d;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .detail img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .contact-box {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+    }
+
+    .copy-btn {
+      background-color: #238636;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .copy-btn:hover {
+      background-color: #2ea043;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🧠 Shadow AI Store</h1>
+    <nav>
+      <a href="#bots">AI Bots</a>
+      <a href="#contact">Upload Bot</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Buy Powerful AI Bots and Tools</h2>
+    <p>Telegram Bots | YouTube Bots | Automation Tools | Custom Scripts</p>
+    <a href="#bots" class="btn">Explore Bots</a>
+  </section>
+
+  <section id="bots" class="section">
+    <div class="card-grid">
+      <div class="card" onclick="showDetail('youtube')">
+        <h3>YouTube Watch Bot</h3>
+        <p>Boost views using rotating proxies.</p>
+      </div>
+
+      <div class="card" onclick="showDetail('telegram')">
+        <h3>Telegram Auto Responder</h3>
+        <p>AI replies to messages on Telegram.</p>
+      </div>
+
+      <div class="card" onclick="showDetail('proxy')">
+        <h3>Proxy Scraper Engine</h3>
+        <p>Scrapes & tests proxies automatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="bot-detail" class="detail">
+    <img id="bot-image" src="" alt="Bot Image">
+    <h2 id="bot-title"></h2>
+    <p id="bot-description"></p>
+    <pre><code id="bot-code"># Example Code Snippet</code></pre>
+    <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+    <div class="contact-box">
+      <h3>Contact This Developer</h3>
+      <p>📧 Email: shadowaistore@example.com</p>
+      <p>📞 Phone: 0300-0000000</p>
+      <p>💬 Discord: shadow#9999</p>
+      <p>👨‍💻 Upload your own AI Bot project by contacting above. We’ll publish it under your credit.</p>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <h2 class="text-center">Upload Your Bot</h2>
+    <p>📩 Telegram: <a href="https://t.me/YourShadowBot" style="color:#58a6ff">@YourShadowBot</a></p>
+    <p>📧 Email: <a href="mailto:shadowaistore@example.com" style="color:#58a6ff">shadowaistore@example.com</a></p>
+    <p>📞 Phone: 0300-0000000</p>
+    <p>💬 Discord: shadow#9999</p>
+  </section>
+
+  <footer>
+    &copy; 2025 Shadow AI Store. Built with ❤️ by Shadow.
+  </footer>
+
+  <script>
+    const botData = {
+      youtube: {
+        title: 'YouTube Watch Bot',
+        description: 'Boost your YouTube video views using high-speed rotating proxies. Simple, secure, no login required. Includes analytics.',
+        image: 'https://i.imgur.com/6dX9sKz.png',
+        code: `# Sample Python script\nimport requests\nprint("Watching video...")`
+      },
+      telegram: {
+        title: 'Telegram Auto Responder',
+        description: 'Create intelligent replies for Telegram groups or channels using GPT-powered responses.',
+        image: 'https://i.imgur.com/s5q0Y8O.png',
+        code: `# Auto reply bot\nfrom telegram.ext import *\nprint("Bot started")`
+      },
+      proxy: {
+        title: 'Proxy Scraper Engine',
+        description: 'Find fresh proxies from the web, validate them with YouTube, and export usable IPs in seconds.',
+        image: 'https://i.imgur.com/TOzW0dY.png',
+        code: `# Scraper\nfrom bs4 import BeautifulSoup\nprint("Scraping proxies")`
+      }
+    };
+
+    function showDetail(botKey) {
+      const bot = botData[botKey];
+      document.getElementById('bot-title').textContent = bot.title;
+      document.getElementById('bot-description').textContent = bot.description;
+      document.getElementById('bot-image').src = bot.image;
+      document.getElementById('bot-code').textContent = bot.code;
+      document.getElementById('bot-detail').style.display = 'block';
+      window.scrollTo({ top: document.getElementById('bot-detail').offsetTop - 100, behavior: 'smooth' });
+    }
+
+    function copyCode() {
+      const codeText = document.getElementById('bot-code').textContent;
+      navigator.clipboard.writeText(codeText).then(() => {
+        alert('Code copied to clipboard!');
+      });
+    }
+  </script>
+</body>
+
+</html>
